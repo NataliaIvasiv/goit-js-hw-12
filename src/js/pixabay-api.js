@@ -4,7 +4,7 @@ export async function fetchImages(keyWord) {
     const BASE_URL = 'https://pixabay.com';
     const END_POINT = '/api?';
     const params = {
-        apiKey: API_KEY,
+        key: API_KEY,
         q: keyWord,
         image_type: "photo",
         orientation: "horizontal",
