@@ -53,20 +53,21 @@ async function onFormSubmit(event) {
     try {
         const images = await fetchImages(keyWord, page);
         maxPage = Math.ceil(images.total / 15);
-        console.log(maxPage);
+        
         showEmptySearchResult(images);
             renderImages(images);
              
     
     gallery.refresh();
         hideLoader();
+        showLoadMore();
        
     } catch (error) {
         console.log(error)
         };
      
     event.target.reset();
-    showLoadMore();
+    
 }
 
 
