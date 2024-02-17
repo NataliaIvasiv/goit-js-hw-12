@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
@@ -7,11 +7,13 @@ import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import { fetchImages } from './js/pixabay-api';
+import { imagesTemplate } from "./js/render-functions";
+
 
 const form = document.querySelector('form');
-
 const imagesList = document.querySelector(".gallery")
 const loader = document.querySelector(".loader")
+
 
 const options = {
   captions: true,
@@ -22,27 +24,44 @@ const options = {
   captionDelay: 250,
 };
 
+
 let keyWord;
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
+form.addEventListener('submit', onFormSubmit)
+
+
+
+async function onFormSubmit(event) {
+        event.preventDefault();
     imagesList.innerHTML = '';
 
-    keyWord = event.target.elements.search.value;
-    loader.classList.remove('is-hidden')
-    
-    fetchImages(keyWord)
-        .then((images) => {
-            showEmptySearchResult(images);
+    keyWord = event.target.elements.search.value.trim();
+    loader.classList.remove('is-hidden');
+
+    if (!keyWord) {
+    iziToast.warning({
+        title: 'Caution',
+        position: "topLeft",
+    message: 'This field is required',
+    });
+        loader.classList.add('is-hidden')
+    return;
+  }
+    try {
+        const images = await fetchImages(keyWord);
+        showEmptySearchResult(images);
             renderImages(images);
              let gallery = new SimpleLightbox('.gallery a', options);
     gallery.on('show.simplelightbox');
     gallery.refresh();
             loader.classList.add('is-hidden');
-        })
-        .catch((error) => console.log(error));
+    } catch (error) {
+        console.log(error)
+        };
     
     event.target.reset();
-})
+    
+}
+
 
 function showEmptySearchResult(images) {
     if (!images.total) {
@@ -55,31 +74,17 @@ function showEmptySearchResult(images) {
 }
 
 
-
-
-
-
-
-
-
-function renderImages(images){
-    const markup = images.hits
-        .map((image) => {
-            return ` <a href="${image.largeImageURL}" class="image-card">
-    <img src="${image.webformatURL}" alt="${image.tags}"/>
-    <div class="caption">
-    <ul class="caption-list"><li class="caption-text">Views <span>${image.views}</span></li>
-    <li class="caption-text">Likes <span>${image.likes}</span></li>
-    <li class="caption-text">Comments <span>${image.comments}</span></li>
-    <li class="caption-text">Downloads <span>${image.downloads}</span></li>
-    </ul>
-    </div>
-  </a>`;
-        })
-        .join("");
-    imagesList.innerHTML = markup;
-   
+function renderImages(images) {
+    const markup = imagesTemplate(images);
+    imagesList.insertAdjacentHTML('beforeend', markup)
 }
+
+
+
+
+
+
+
 
 
 
