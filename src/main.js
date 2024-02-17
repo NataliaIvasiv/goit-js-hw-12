@@ -54,14 +54,13 @@ async function onFormSubmit(event) {
         const images = await fetchImages(keyWord, page);
         maxPage = Math.ceil(images.total / 15);
         
-        showEmptySearchResult(images);
-            renderImages(images);
+        renderImages(images);
              
     
     gallery.refresh();
         hideLoader();
         showLoadMore();
-       
+       showEmptySearchResult(images);
     } catch (error) {
         console.log(error)
         };
@@ -78,7 +77,7 @@ function showEmptySearchResult(images) {
             message: 'Sorry, there are no images matching your search query. Please try again!',
     position: 'topRight',
 });
-    }
+   hideLoadMore() }
 }
 
 
