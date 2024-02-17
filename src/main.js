@@ -1,8 +1,12 @@
+import axios from 'axios';
+
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
 import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+import { fetchImages } from './js/pixabay-api';
 
 const form = document.querySelector('form');
 
@@ -54,19 +58,7 @@ function showEmptySearchResult(images) {
 
 
 
-function fetchImages(keyWord) {
-    const BASE_URL = 'https://pixabay.com';
-const END_POINT = '/api';
-const PARAMS = `?key=42236651-09dd8ef8cae726de85d6e38a7&q=${keyWord}&image_type=photo&orientation=horizontal&safesearch=true`;
-const url = BASE_URL + END_POINT + PARAMS;
-    return fetch(url).then((response) => {
- 
-        if (!response.ok) {
-            throw new Error(response.status);
-        }
-        return response.json();
-    });
-}
+
 
 
 
