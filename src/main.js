@@ -59,7 +59,8 @@ async function onFormSubmit(event) {
     
     gallery.refresh();
         hideLoader();
-        showLoadMore();
+
+        checkTheOnlyPage();
        showEmptySearchResult(images);
     } catch (error) {
         console.log(error)
@@ -99,17 +100,16 @@ async function onLoadMoreButton(event) {
         showLoadMore();
     checkGalleryEnd();
 
-     const height =
-    imagesList.firstElementChild.getBoundingClientRect().height;
-
-  scrollBy({
-    behavior: 'smooth',
-    top: `${2 * height}`,
-  });
+    scroll();
 }
 
 
 
+function checkTheOnlyPage() {
+    if (page != maxPage) {
+        showLoadMore();
+    }
+}
 
 function checkGalleryEnd() {
     if (page >= maxPage) {
@@ -137,5 +137,13 @@ function hideLoadMore() {
 }
 
 
+function scroll() {
+     const height =
+    imagesList.firstElementChild.getBoundingClientRect().height;
 
+  scrollBy({
+    behavior: 'smooth',
+    top: `${2 * height}`,
+  });
+}
 
