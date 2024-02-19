@@ -37,7 +37,8 @@ async function onFormSubmit(event) {
         event.preventDefault();
     imagesList.innerHTML = '';
     page = 1;
-
+    hideLoadMore();
+    
     keyWord = event.target.elements.search.value.trim();
     showLoader();
 
@@ -63,7 +64,8 @@ async function onFormSubmit(event) {
         checkTheOnlyPage();
        showEmptySearchResult(images);
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        catchError();
         };
      
     event.target.reset();
@@ -147,3 +149,10 @@ function scroll() {
   });
 }
 
+function catchError(){
+    iziToast.error({
+    title: '',
+            message: 'Sorry, maybe there are some issues with network connection!',
+    position: 'topRight',
+});
+}
